@@ -396,8 +396,8 @@ function handleAddEvent(e) {
 function handleSearch(e) {
   searchQuery = e.target.value.trim();
 
-  // Keep both search inputs in sync
-  const d = document.getElementById('search-input');
+  // Keep both search inputs in sync (desktop id = search-desktop, mobile = search-mobile)
+  const d = document.getElementById('search-desktop');
   const m = document.getElementById('search-mobile');
   if (d && e.target !== d) d.value = e.target.value;
   if (m && e.target !== m) m.value = e.target.value;
@@ -450,27 +450,61 @@ function attachCardListeners() {
 }
 
 // ════════════════════════════════════════════════════════════
-// MOBILE MENU
+// DARK / LIGHT MODE TOGGLE
 // ════════════════════════════════════════════════════════════
 
+function initDarkMode() {
+  // Load saved preference, default to dark
+  const saved = localStorage.getItem('eduevents_theme') || 'dark';
+  applyTheme(saved);
+
+  // Wire up both toggle buttons (desktop + mobile)
+  document.getElementById('mode-toggle')?.addEventListener('click', toggleTheme);
+  document.getElementById('mode-toggle-mobile')?.addEventListener('click', toggleTheme);
+}
+
+function toggleTheme() {
+  const isLight = document.documentElement.classList.contains('light');
+  applyTheme(isLight ? 'dark' : 'light');
+}
+
+function applyTheme(theme) {
+  const html = document.documentElement;
+  const isLight = theme === 'light';
+
+  html.classList.toggle('light', isLight);
+
+  // Swap moon/sun icons on desktop toggle
+  document.getElementById('icon-moon')?.classList.toggle('hidden',  isLight);
+  document.getElementById('icon-sun')?.classList.toggle('hidden',  !isLight);
+  // Swap moon/sun icons on mobile toggle
+  document.getElementById('icon-moon-m')?.classList.toggle('hidden',  isLight);
+  document.getElementById('icon-sun-m')?.classList.toggle('hidden',  !isLight);
+
+  // Persist preference
+  localStorage.setItem('eduevents_theme', theme);
+}
+
 function attachMobileMenu() {
-  const btn       = document.getElementById('hamburger-btn');
-  const menu      = document.getElementById('mobile-menu');
-  const iconOpen  = document.getElementById('icon-open');
-  const iconClose = document.getElementById('icon-close');
+  const btn       = document.getElementById('ham-btn');
+  const menu      = document.getElementById('mob-menu');
+  const iconOpen  = document.getElementById('ham-open');
+  const iconClose = document.getElementById('ham-close');
+
+  if (!btn || !menu) return;
 
   btn.addEventListener('click', () => {
     const nowHidden = menu.classList.toggle('hidden');
-    iconOpen.classList.toggle('hidden',  !nowHidden);
-    iconClose.classList.toggle('hidden',  nowHidden);
+    iconOpen?.classList.toggle('hidden',  !nowHidden);
+    iconClose?.classList.toggle('hidden',  nowHidden);
     btn.setAttribute('aria-expanded', String(!nowHidden));
   });
 
   menu.querySelectorAll('a').forEach(a => {
     a.addEventListener('click', () => {
       menu.classList.add('hidden');
-      iconOpen.classList.remove('hidden');
-      iconClose.classList.add('hidden');
+      iconOpen?.classList.remove('hidden');
+      iconClose?.classList.add('hidden');
       btn.setAttribute('aria-expanded', 'false');
     });
   });
@@ -490,10 +524,11 @@ function init() {
   renderEvents();
   attachCardListeners();
   attachMobileMenu();
+  initDarkMode();
 
   document.getElementById('add-event-form').addEventListener('submit', handleAddEvent);
 
-  const desktopSearch = document.getElementById('search-input');
+  const desktopSearch = document.getElementById('search-desktop');
   const mobileSearch  = document.getElementById('search-mobile');
   if (desktopSearch) desktopSearch.addEventListener('input', handleSearch);
   if (mobileSearch)  mobileSearch.addEventListener('input',  handleSearch);
