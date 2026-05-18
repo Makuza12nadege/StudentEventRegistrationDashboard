@@ -217,7 +217,7 @@ function createEventCard(event) {
   seatGrid.innerHTML = `
     <div class="seat-box seat-box-default">
       <p class="seat-label">Total</p>
-      <p class="seat-value" style="color:#e2e8f0;">${event.seats}</p>
+      <p class="seat-value" style="color:var(--text-primary);">${event.seats}</p>
     </div>
     <div class="seat-box seat-box-registered">
       <p class="seat-label" style="color:#a78bfa;">Registered</p>

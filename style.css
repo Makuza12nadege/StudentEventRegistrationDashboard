@@ -1,93 +1,284 @@
 /* ============================================================
    EduEvents — style.css
-   Contains:
-   1. Dark / Light mode variables
-   2. All card-internal classes (Tailwind CDN can't scan JS innerHTML)
-   3. Animations & scrollbar
+   Full dark/light mode using CSS custom properties.
+   No hardcoded white/dark text anywhere — everything adapts.
    ============================================================ */
 
-/* ── Reset ────────────────────────────────────────────────── */
+/* ── Reset & base ─────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
-
-/* ══════════════════════════════════════════════════════════
-   DARK / LIGHT MODE
-   The <html> element gets class="dark" or class="light".
-   Default is dark.
-   ══════════════════════════════════════════════════════════ */
-
-/* Dark mode (default) */
-:root {
-  --bg-page:        #020617;
-  --bg-section:     rgba(15,10,30,1);
-  --bg-card:        rgba(255,255,255,0.03);
-  --bg-card-hover:  rgba(255,255,255,0.06);
-  --border-card:    rgba(255,255,255,0.08);
-  --border-hover:   rgba(139,92,246,0.35);
-  --bg-stat:        rgba(255,255,255,0.03);
-  --border-stat:    rgba(255,255,255,0.07);
-  --bg-form:        rgba(255,255,255,0.03);
-  --border-form:    rgba(255,255,255,0.08);
-  --bg-input:       rgba(255,255,255,0.06);
-  --border-input:   rgba(255,255,255,0.12);
-  --text-primary:   #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-muted:     #475569;
-  --bg-seat-default:rgba(30,41,59,0.7);
-  --border-seat:    rgba(255,255,255,0.08);
-  --bg-progress:    rgba(30,41,59,0.8);
-  --nav-bg:         rgba(2,6,23,0.92);
-  --scrollbar-track:#020617;
-  --scrollbar-thumb:#1e293b;
-}
-
-/* Light mode — applied when <html class="light"> */
-html.light {
-  --bg-page:        #f1f5f9;
-  --bg-section:     #e2e8f0;
-  --bg-card:        #ffffff;
-  --bg-card-hover:  #f8fafc;
-  --border-card:    #e2e8f0;
-  --border-hover:   rgba(124,58,237,0.4);
-  --bg-stat:        #ffffff;
-  --border-stat:    #e2e8f0;
-  --bg-form:        #ffffff;
-  --border-form:    #e2e8f0;
-  --bg-input:       #f8fafc;
-  --border-input:   #cbd5e1;
-  --text-primary:   #0f172a;
-  --text-secondary: #475569;
-  --text-muted:     #94a3b8;
-  --bg-seat-default:#f1f5f9;
-  --border-seat:    #e2e8f0;
-  --bg-progress:    #e2e8f0;
-  --nav-bg:         rgba(255,255,255,0.95);
-  --scrollbar-track:#f1f5f9;
-  --scrollbar-thumb:#cbd5e1;
-}
-
-/* Apply page background via variable */
-body {
+html  { scroll-behavior: smooth; }
+body  {
+  font-family: 'Inter', system-ui, sans-serif;
+  margin: 0;
+  min-height: 100vh;
   background-color: var(--bg-page);
   color: var(--text-primary);
   transition: background-color 0.3s, color 0.3s;
 }
 
+/* ══════════════════════════════════════════════════════════
+   CSS CUSTOM PROPERTIES — DARK (default)
+   ══════════════════════════════════════════════════════════ */
+:root {
+  /* Backgrounds */
+  --bg-page:          #020617;
+  --bg-nav:           rgba(2,6,23,0.92);
+  --bg-hero:          linear-gradient(180deg,#0f0a1e 0%,#020617 100%);
+  --bg-stats:         rgba(15,23,42,0.6);
+  --bg-card:          rgba(255,255,255,0.03);
+  --bg-card-hover:    rgba(255,255,255,0.06);
+  --bg-form:          rgba(255,255,255,0.03);
+  --bg-input:         rgba(255,255,255,0.06);
+  --bg-seat-default:  rgba(30,41,59,0.7);
+  --bg-progress:      rgba(30,41,59,0.8);
+  --bg-empty-icon:    #1e293b;
+  --bg-footer:        rgba(15,23,42,0.5);
+
+  /* Borders */
+  --border-nav:       rgba(255,255,255,0.10);
+  --border-card:      rgba(255,255,255,0.08);
+  --border-card-hover:rgba(139,92,246,0.35);
+  --border-form:      rgba(255,255,255,0.08);
+  --border-input:     rgba(255,255,255,0.12);
+  --border-stats:     rgba(255,255,255,0.05);
+  --border-seat:      rgba(255,255,255,0.08);
+  --border-footer:    rgba(255,255,255,0.05);
+
+  /* Text */
+  --text-primary:     #f1f5f9;
+  --text-secondary:   #94a3b8;
+  --text-muted:       #64748b;
+  --text-label:       #94a3b8;
+  --text-nav:         #cbd5e1;
+  --text-nav-hover:   #ffffff;
+  --text-stat-label:  #94a3b8;
+  --text-stat-number: #f1f5f9;
+  --text-footer:      #64748b;
+  --text-empty-icon:  #475569;
+
+  /* Hero specific */
+  --hero-badge-bg:    rgba(255,255,255,0.07);
+  --hero-badge-border:rgba(255,255,255,0.15);
+  --hero-badge-text:  #cbd5e1;
+  --hero-heading:     #ffffff;
+  --hero-desc:        #94a3b8;
+  --hero-btn-ghost-bg:rgba(255,255,255,0.07);
+  --hero-btn-ghost-border:rgba(255,255,255,0.20);
+  --hero-btn-ghost-text:#ffffff;
+
+  /* Blobs */
+  --blob-violet:      rgba(109,40,217,0.20);
+  --blob-emerald:     rgba(16,185,129,0.10);
+
+  /* Nav hover */
+  --nav-hover-bg:     rgba(255,255,255,0.10);
+  --ham-color:        #94a3b8;
+
+  /* Mode button */
+  --mode-btn-bg:      rgba(255,255,255,0.06);
+  --mode-btn-border:  rgba(255,255,255,0.12);
+  --mode-btn-color:   #94a3b8;
+  --mode-btn-hover-bg:rgba(255,255,255,0.12);
+  --mode-btn-hover-color:#ffffff;
+
+  /* Scrollbar */
+  --scrollbar-track:  #020617;
+  --scrollbar-thumb:  #1e293b;
+}
+
+/* ══════════════════════════════════════════════════════════
+   CSS CUSTOM PROPERTIES — LIGHT
+   ══════════════════════════════════════════════════════════ */
+html.light {
+  --bg-page:          #f8fafc;
+  --bg-nav:           rgba(255,255,255,0.95);
+  --bg-stats:         #f1f5f9;
+  --bg-card:          #ffffff;
+  --bg-card-hover:    #f8fafc;
+  --bg-form:          #ffffff;
+  --bg-input:         #f8fafc;
+  --bg-seat-default:  #f1f5f9;
+  --bg-progress:      #e2e8f0;
+  --bg-empty-icon:    #e2e8f0;
+  --bg-footer:        #e2e8f0;
+
+  --border-nav:       #e2e8f0;
+  --border-card:      #e2e8f0;
+  --border-card-hover:rgba(124,58,237,0.4);
+  --border-form:      #e2e8f0;
+  --border-input:     #cbd5e1;
+  --border-stats:     #e2e8f0;
+  --border-seat:      #e2e8f0;
+  --border-footer:    #cbd5e1;
+
+  --text-primary:     #0f172a;
+  --text-secondary:   #475569;
+  --text-muted:       #64748b;
+  --text-label:       #64748b;
+  --text-nav:         #475569;
+  --text-nav-hover:   #0f172a;
+  --text-stat-label:  #64748b;
+  --text-stat-number: #0f172a;
+  --text-footer:      #64748b;
+  --text-empty-icon:  #94a3b8;
+
+  --hero-badge-bg:    rgba(124,58,237,0.08);
+  --hero-badge-border:rgba(124,58,237,0.20);
+  --hero-badge-text:  #5b21b6;
+  --hero-heading:     #0f172a;
+  --hero-desc:        #475569;
+  --hero-btn-ghost-bg:rgba(124,58,237,0.08);
+  --hero-btn-ghost-border:rgba(124,58,237,0.25);
+  --hero-btn-ghost-text:#5b21b6;
+
+  --blob-violet:      rgba(139,92,246,0.12);
+  --blob-emerald:     rgba(16,185,129,0.08);
+
+  --nav-hover-bg:     rgba(0,0,0,0.05);
+  --ham-color:        #475569;
+
+  --mode-btn-bg:      #f1f5f9;
+  --mode-btn-border:  #cbd5e1;
+  --mode-btn-color:   #475569;
+  --mode-btn-hover-bg:#e2e8f0;
+  --mode-btn-hover-color:#0f172a;
+
+  --scrollbar-track:  #f1f5f9;
+  --scrollbar-thumb:  #cbd5e1;
+}
+
+/* ── Utility classes driven by variables ──────────────────── */
+.text-adaptive  { color: var(--text-primary); }
+.text-muted     { color: var(--text-muted); }
+.label-text     { color: var(--text-label); }
+.stat-label     { color: var(--text-stat-label); }
+.stat-number    { color: var(--text-stat-number); }
+.section-label  { color: var(--text-muted); }
+
 /* ── Navbar ───────────────────────────────────────────────── */
 .nav-blur {
-  background: var(--nav-bg);
+  background: var(--bg-nav);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   transition: background 0.3s;
 }
+.nav-border  { border-bottom: 1px solid var(--border-nav); }
+.mob-menu-border { border-top: 1px solid var(--border-nav); }
 
-/* Light mode navbar text */
-html.light .nav-link-text { color: #334155; }
-html.light .nav-link-text:hover { color: #0f172a; background: rgba(0,0,0,0.05); }
+.nav-link {
+  color: var(--text-nav);
+  text-decoration: none;
+}
+.nav-link:hover {
+  color: var(--text-nav-hover);
+  background: var(--nav-hover-bg);
+}
 
-/* ── Stat cards ───────────────────────────────────────────── */
+.mob-link {
+  color: var(--text-nav);
+  text-decoration: none;
+}
+.mob-link:hover {
+  color: var(--text-nav-hover);
+  background: var(--nav-hover-bg);
+}
+
+.ham-btn { color: var(--ham-color); }
+.ham-btn:hover { color: var(--text-nav-hover); background: var(--nav-hover-bg); }
+
+.search-icon { color: var(--text-muted); }
+
+/* ── Logo ─────────────────────────────────────────────────── */
+.logo-bg {
+  background: linear-gradient(135deg, #7c3aed, #4f46e5);
+  box-shadow: 0 0 14px rgba(124,58,237,0.5);
+}
+
+/* ── Mode toggle button ───────────────────────────────────── */
+.mode-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px; height: 36px;
+  border-radius: 0.625rem;
+  border: 1px solid var(--mode-btn-border);
+  background: var(--mode-btn-bg);
+  color: var(--mode-btn-color);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  flex-shrink: 0;
+}
+.mode-btn:hover {
+  background: var(--mode-btn-hover-bg);
+  color: var(--mode-btn-hover-color);
+}
+
+/* ── Hero ─────────────────────────────────────────────────── */
+.hero-section {
+  background:
+    radial-gradient(ellipse 80% 60% at 50% -10%, var(--blob-violet) 0%, transparent 70%),
+    var(--bg-hero);
+  transition: background 0.3s;
+}
+
+.blob-violet  { background: var(--blob-violet); }
+.blob-emerald { background: var(--blob-emerald); }
+
+.hero-badge {
+  background: var(--hero-badge-bg);
+  border: 1px solid var(--hero-badge-border);
+}
+.hero-badge-text { color: var(--hero-badge-text); }
+
+.hero-heading-text { color: var(--hero-heading); }
+
+.grad-text {
+  background: linear-gradient(135deg, #a78bfa, #34d399);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-desc { color: var(--hero-desc); }
+
+/* ── Buttons ──────────────────────────────────────────────── */
+.btn-violet {
+  background: linear-gradient(135deg, #7c3aed, #4f46e5);
+  color: #ffffff !important;
+  box-shadow: 0 4px 18px rgba(124,58,237,0.4);
+  transition: opacity .2s, transform .15s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+}
+.btn-violet:hover  { opacity: .88; transform: translateY(-1px); }
+.btn-violet:active { transform: translateY(0); }
+
+.btn-ghost {
+  background: var(--hero-btn-ghost-bg);
+  color: var(--hero-btn-ghost-text);
+  border: 1px solid var(--hero-btn-ghost-border);
+  transition: opacity .2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+.btn-ghost:hover { opacity: 0.8; }
+
+/* ── Stats section ────────────────────────────────────────── */
+.stats-section {
+  background: var(--bg-stats);
+  transition: background 0.3s;
+}
+.stats-border { border-color: var(--border-stats); }
+
 .stat-card {
-  background: var(--bg-stat);
-  border: 1px solid var(--border-stat);
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
   border-radius: 1rem;
   transition: transform 0.2s, background 0.3s, border-color 0.3s;
 }
@@ -108,9 +299,9 @@ html.light .nav-link-text:hover { color: #0f172a; background: rgba(0,0,0,0.05); 
   border: 1px solid var(--border-input);
   color: var(--text-primary);
   outline: none;
-  font-size: 16px; /* prevents iOS auto-zoom */
-  transition: border-color 0.2s, box-shadow 0.2s, background 0.3s;
+  font-size: 16px;
   width: 100%;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.3s;
 }
 .glass-input::placeholder { color: var(--text-muted); }
 .glass-input:focus {
@@ -118,14 +309,11 @@ html.light .nav-link-text:hover { color: #0f172a; background: rgba(0,0,0,0.05); 
   box-shadow: 0 0 0 3px rgba(139,92,246,0.15);
 }
 .glass-input option { background: #1e1b4b; color: #e2e8f0; }
-html.light .glass-input option { background: #f1f5f9; color: #0f172a; }
+html.light .glass-input option { background: #f8fafc; color: #0f172a; }
 
 /* ══════════════════════════════════════════════════════════
-   EVENT CARDS
-   All classes below are used in app.js innerHTML/createElement.
-   Tailwind CDN cannot scan JS strings, so they live here.
+   EVENT CARDS  (built via JS — no Tailwind scanning)
    ══════════════════════════════════════════════════════════ */
-
 .event-card {
   background: var(--bg-card);
   border: 1px solid var(--border-card);
@@ -140,19 +328,13 @@ html.light .glass-input option { background: #f1f5f9; color: #0f172a; }
 }
 .event-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 16px 40px rgba(0,0,0,0.25);
-  border-color: var(--border-hover);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.15);
+  border-color: var(--border-card-hover);
   background: var(--bg-card-hover);
 }
 
-/* Coloured accent bar at top */
-.card-accent {
-  height: 3px;
-  width: 100%;
-  flex-shrink: 0;
-}
+.card-accent { height: 3px; width: 100%; flex-shrink: 0; }
 
-/* Card body */
 .card-body {
   padding: 1rem;
   flex: 1;
@@ -160,11 +342,8 @@ html.light .glass-input option { background: #f1f5f9; color: #0f172a; }
   flex-direction: column;
   gap: 0.75rem;
 }
-@media (min-width: 640px) {
-  .card-body { padding: 1.25rem; gap: 0.875rem; }
-}
+@media (min-width: 640px) { .card-body { padding: 1.25rem; gap: 0.875rem; } }
 
-/* Title + badge row */
 .card-title-row {
   display: flex;
   align-items: flex-start;
@@ -181,7 +360,6 @@ html.light .glass-input option { background: #f1f5f9; color: #0f172a; }
 }
 @media (min-width: 640px) { .card-title { font-size: 1rem; } }
 
-/* Category badge */
 .card-badge {
   display: inline-flex;
   align-items: center;
@@ -194,13 +372,8 @@ html.light .glass-input option { background: #f1f5f9; color: #0f172a; }
   white-space: nowrap;
   flex-shrink: 0;
 }
-.badge-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
+.badge-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
 
-/* Seat stats grid */
 .seat-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -229,13 +402,12 @@ html.light .glass-input option { background: #f1f5f9; color: #0f172a; }
 }
 @media (min-width: 640px) { .seat-label { font-size: 0.6875rem; } }
 
-.seat-value {
-  font-weight: 700;
-  font-size: 0.875rem;
-}
+.seat-value { font-weight: 700; font-size: 0.875rem; }
 @media (min-width: 640px) { .seat-value { font-size: 1rem; } }
 
-/* Progress bar */
+/* In light mode, seat values that use inline color:#e2e8f0 need override */
+html.light .seat-value-default { color: #0f172a !important; }
+
 .progress-row {
   display: flex;
   justify-content: space-between;
@@ -256,15 +428,13 @@ html.light .glass-input option { background: #f1f5f9; color: #0f172a; }
   transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
 }
 
-/* Fully booked badge */
 .full-badge {
   font-size: 0.6875rem;
-  color: #f87171;
+  color: #ef4444;
   font-weight: 600;
   animation: softPulse 2s infinite;
 }
 
-/* Card action buttons */
 .card-actions {
   padding: 0 1rem 1rem;
   display: flex;
@@ -288,7 +458,7 @@ html.light .glass-input option { background: #f1f5f9; color: #0f172a; }
 .btn-register:hover  { opacity: 0.88; transform: translateY(-1px); }
 .btn-register:active { transform: translateY(0); }
 .btn-register:disabled {
-  background: rgba(100,116,139,0.2);
+  background: var(--bg-seat-default);
   color: var(--text-muted);
   box-shadow: none;
   cursor: not-allowed;
@@ -304,17 +474,21 @@ html.light .glass-input option { background: #f1f5f9; color: #0f172a; }
   font-weight: 600;
   cursor: pointer;
   background: rgba(239,68,68,0.1);
-  color: #f87171;
+  color: #ef4444;
   border: 1px solid rgba(239,68,68,0.25);
   transition: background 0.2s, border-color 0.2s;
 }
 .btn-cancel:hover { background: rgba(239,68,68,0.2); border-color: rgba(239,68,68,0.4); }
 .btn-cancel:disabled {
-  background: rgba(100,116,139,0.1);
+  background: var(--bg-seat-default);
   color: var(--text-muted);
-  border-color: rgba(100,116,139,0.15);
+  border-color: var(--border-seat);
   cursor: not-allowed;
 }
+
+/* ── Empty state ──────────────────────────────────────────── */
+.empty-icon-bg { background: var(--bg-empty-icon); }
+.empty-icon    { color: var(--text-empty-icon); }
 
 /* ── Alert toast ──────────────────────────────────────────── */
 #alert-box { animation: slideIn 0.3s ease; }
@@ -323,54 +497,21 @@ html.light .glass-input option { background: #f1f5f9; color: #0f172a; }
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* ── Footer ───────────────────────────────────────────────── */
+.site-footer {
+  background: var(--bg-footer);
+  border-top: 1px solid var(--border-footer);
+  color: var(--text-footer);
+  transition: background 0.3s, color 0.3s;
+}
+
 /* ── Animations ───────────────────────────────────────────── */
 @keyframes softPulse {
   0%, 100% { opacity: 1; }
   50%       { opacity: 0.45; }
 }
 
-/* ── Dark/Light mode toggle button ───────────────────────── */
-.mode-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px; height: 36px;
-  border-radius: 0.625rem;
-  border: 1px solid rgba(255,255,255,0.12);
-  background: rgba(255,255,255,0.06);
-  color: #94a3b8;
-  cursor: pointer;
-  transition: background 0.2s, border-color 0.2s, color 0.2s;
-  flex-shrink: 0;
-}
-.mode-btn:hover { background: rgba(255,255,255,0.12); color: #fff; }
-html.light .mode-btn {
-  border-color: #cbd5e1;
-  background: #f1f5f9;
-  color: #475569;
-}
-html.light .mode-btn:hover { background: #e2e8f0; color: #0f172a; }
-
-/* ── Light mode overrides for static HTML elements ────────── */
-html.light body { background-color: #f1f5f9; color: #0f172a; }
-
-html.light .hero-bg {
-  background:
-    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(139,92,246,0.15) 0%, transparent 70%),
-    linear-gradient(180deg, #ede9fe 0%, #f1f5f9 100%);
-}
-
-html.light #stats { background: rgba(241,245,249,0.8); }
-
-html.light .stat-card { box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
-
-html.light footer {
-  background: #e2e8f0;
-  border-color: #cbd5e1;
-  color: #64748b;
-}
-
-/* ── Custom scrollbar ─────────────────────────────────────── */
+/* ── Scrollbar ────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--scrollbar-track); }
 ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 3px; }
