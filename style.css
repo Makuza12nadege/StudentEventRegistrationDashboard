@@ -122,18 +122,6 @@ html.light {
   --text-footer:      #64748b;
   --text-empty-icon:  #94a3b8;
 
-  --hero-badge-bg:    rgba(124,58,237,0.08);
-  --hero-badge-border:rgba(124,58,237,0.20);
-  --hero-badge-text:  #5b21b6;
-  --hero-heading:     #0f172a;
-  --hero-desc:        #475569;
-  --hero-btn-ghost-bg:rgba(124,58,237,0.08);
-  --hero-btn-ghost-border:rgba(124,58,237,0.25);
-  --hero-btn-ghost-text:#5b21b6;
-
-  --blob-violet:      rgba(139,92,246,0.12);
-  --blob-emerald:     rgba(16,185,129,0.08);
-
   --nav-hover-bg:     rgba(0,0,0,0.05);
   --ham-color:        #475569;
 
@@ -213,25 +201,50 @@ html.light {
   color: var(--mode-btn-hover-color);
 }
 
-/* ── Hero ─────────────────────────────────────────────────── */
+/* ── Hero — ALWAYS dark, text always white/light ─────────── */
+/* The hero looks best dark in both modes. We lock it. */
 .hero-section {
   background:
-    radial-gradient(ellipse 80% 60% at 50% -10%, var(--blob-violet) 0%, transparent 70%),
-    var(--bg-hero);
-  transition: background 0.3s;
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(109,40,217,0.45) 0%, transparent 70%),
+    linear-gradient(180deg, #1a0f3e 0%, #0d1117 100%);
+  position: relative;
 }
 
-.blob-violet  { background: var(--blob-violet); }
-.blob-emerald { background: var(--blob-emerald); }
+/* In light mode, keep hero dark but add a subtle top border so it
+   doesn't look disconnected from the white navbar */
+html.light .hero-section {
+  background:
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(124,58,237,0.5) 0%, transparent 70%),
+    linear-gradient(180deg, #1e1040 0%, #0f0a2e 100%);
+  border-top: 1px solid rgba(139,92,246,0.2);
+}
 
+/* Hero text — always white/light regardless of mode */
 .hero-badge {
-  background: var(--hero-badge-bg);
-  border: 1px solid var(--hero-badge-border);
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.20);
 }
-.hero-badge-text { color: var(--hero-badge-text); }
+.hero-badge-text  { color: #e2e8f0; }
+.hero-heading-text { color: #ffffff; }
+.hero-desc        { color: #94a3b8; }
 
-.hero-heading-text { color: var(--hero-heading); }
+.blob-violet  { background: rgba(109,40,217,0.20); }
+.blob-emerald { background: rgba(16,185,129,0.10); }
 
+/* Ghost button in hero — always white outline */
+.btn-ghost {
+  background: rgba(255,255,255,0.08);
+  color: #ffffff;
+  border: 1px solid rgba(255,255,255,0.25);
+  transition: background 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+.btn-ghost:hover { background: rgba(255,255,255,0.15); }
+
+/* ── Gradient heading text — always vivid ─────────────────── */
 .grad-text {
   background: linear-gradient(135deg, #a78bfa, #34d399);
   -webkit-background-clip: text;
@@ -239,9 +252,7 @@ html.light {
   background-clip: text;
 }
 
-.hero-desc { color: var(--hero-desc); }
-
-/* ── Buttons ──────────────────────────────────────────────── */
+/* ── Primary violet button ────────────────────────────────── */
 .btn-violet {
   background: linear-gradient(135deg, #7c3aed, #4f46e5);
   color: #ffffff !important;
@@ -256,20 +267,6 @@ html.light {
 }
 .btn-violet:hover  { opacity: .88; transform: translateY(-1px); }
 .btn-violet:active { transform: translateY(0); }
-
-.btn-ghost {
-  background: var(--hero-btn-ghost-bg);
-  color: var(--hero-btn-ghost-text);
-  border: 1px solid var(--hero-btn-ghost-border);
-  transition: opacity .2s;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-}
-.btn-ghost:hover { opacity: 0.8; }
-
-/* ── Stats section ────────────────────────────────────────── */
 .stats-section {
   background: var(--bg-stats);
   transition: background 0.3s;
