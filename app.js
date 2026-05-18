@@ -321,7 +321,99 @@ function registerForEvent(id) {
 }
 
 // ════════════════════════════════════════════════════════════
-// CANCEL  — find()
+// CANCEL CONFIRMATION MODAL
+// ════════════════════════════════════════════════════════════
+
+function showCancelConfirm(eventTitle, onConfirm) {
+  // Remove any existing modal
+  const existing = document.getElementById('cancel-modal');
+  if (existing) existing.remove();
+
+  const overlay = document.createElement('div');
+  overlay.id = 'cancel-modal';
+  overlay.style.cssText = `
+    position:fixed;inset:0;z-index:9999;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);
+    padding:1rem;
+  `;
+
+  overlay.innerHTML = `
+    <div style="
+      background:var(--bg-form);
+      border:1px solid var(--border-form);
+      border-radius:1.25rem;
+      padding:1.75rem;
+      max-width:380px;
+      width:100%;
+      box-shadow:0 24px 60px rgba(0,0,0,0.5);
+      animation:modalIn .2s ease;
+    ">
+      <!-- Icon -->
+      <div style="
+        width:52px;height:52px;border-radius:50%;
+        background:rgba(239,68,68,0.12);
+        border:1px solid rgba(239,68,68,0.25);
+        display:flex;align-items:center;justify-content:center;
+        margin:0 auto 1.25rem;
+      ">
+        <svg width="24" height="24" fill="none" stroke="#ef4444" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+        </svg>
+      </div>
+      <!-- Text -->
+      <h3 style="font-weight:700;font-size:1.1rem;color:var(--text-primary);text-align:center;margin-bottom:.5rem;">
+        Cancel Registration?
+      </h3>
+      <p style="font-size:.875rem;color:var(--text-muted);text-align:center;margin-bottom:1.5rem;line-height:1.5;">
+        Are you sure you want to cancel your registration for<br>
+        <strong style="color:var(--text-primary);">"${escapeHtml(eventTitle)}"</strong>?
+      </p>
+      <!-- Buttons -->
+      <div style="display:flex;gap:.75rem;">
+        <button id="modal-keep"
+          style="
+            flex:1;padding:.7rem 0;border-radius:.75rem;
+            font-size:.875rem;font-weight:600;cursor:pointer;
+            background:var(--bg-input);
+            color:var(--text-primary);
+            border:1px solid var(--border-input);
+            transition:background .2s;
+          ">
+          Keep Registration
+        </button>
+        <button id="modal-confirm"
+          style="
+            flex:1;padding:.7rem 0;border-radius:.75rem;
+            font-size:.875rem;font-weight:600;cursor:pointer;
+            background:linear-gradient(135deg,#dc2626,#ef4444);
+            color:#fff;border:none;
+            box-shadow:0 2px 12px rgba(239,68,68,0.35);
+            transition:opacity .2s;
+          ">
+          Yes, Cancel
+        </button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  // Close on backdrop click
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) overlay.remove();
+  });
+
+  document.getElementById('modal-keep').addEventListener('click', () => overlay.remove());
+  document.getElementById('modal-confirm').addEventListener('click', () => {
+    overlay.remove();
+    onConfirm();
+  });
+}
+
+// ════════════════════════════════════════════════════════════
+// CANCEL  — find() + confirmation dialog
 // ════════════════════════════════════════════════════════════
 
 function cancelRegistration(id) {
@@ -333,10 +425,13 @@ function cancelRegistration(id) {
     return;
   }
 
-  event.registered--;
-  saveToStorage();
-  renderEvents();
-  showAlert(`Registration cancelled for "${event.title}".`, 'info');
+  // Show confirmation modal before cancelling
+  showCancelConfirm(event.title, () => {
+    event.registered--;
+    saveToStorage();
+    renderEvents();
+    showAlert(`Registration cancelled for "${event.title}".`, 'info');
+  });
 }
 
 // ════════════════════════════════════════════════════════════
@@ -441,11 +536,21 @@ function showAlert(message, type = 'success') {
 function attachCardListeners() {
   document.getElementById('events-container').addEventListener('click', e => {
     const btn = e.target.closest('button');
-    if (!btn || btn.disabled) return;
+    if (!btn) return;
+
     const id = parseInt(btn.dataset.id, 10);
     if (isNaN(id)) return;
-    if (btn.classList.contains('register-btn')) registerForEvent(id);
-    if (btn.classList.contains('cancel-btn'))   cancelRegistration(id);
+
+    // Register button — skip if disabled (fully booked)
+    if (btn.classList.contains('register-btn')) {
+      if (!btn.disabled) registerForEvent(id);
+      return;
+    }
+
+    // Cancel button — always allow click, handler shows confirm or error
+    if (btn.classList.contains('cancel-btn')) {
+      cancelRegistration(id);
+    }
   });
 }
 
