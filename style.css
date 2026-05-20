@@ -1,23 +1,55 @@
 /* ============================================================
-   EduEvents — style.css
-   Full dark/light mode using CSS custom properties.
-   No hardcoded white/dark text anywhere — everything adapts.
+   FILE: style.css
+   PROJECT: Student Event Registration Dashboard
+   AUTHOR: Makuza Nadege
+   DATE: 2025
+
+   HOW TO SEARCH THIS FILE:
+   Use Ctrl+F and search for any keyword below:
+
+   KEYWORD              → WHAT YOU WILL FIND
+   ─────────────────────────────────────────────
+   RESET & BASE         → box-sizing, scroll behavior, body font
+   CSS CUSTOM PROPERTIES → All color/background variables for dark mode
+   CSS CUSTOM PROPERTIES LIGHT → All color/background variables for light mode
+   UTILITY CLASSES      → .text-adaptive, .text-muted, .stat-label etc.
+   NAVBAR               → .nav-blur, .nav-border, .nav-link, .mob-link
+   LOGO                 → .logo-bg gradient and glow
+   MODE TOGGLE BUTTON   → .mode-btn dark/light switch button
+   HERO                 → .hero-section background, badge, heading, description
+   BUTTONS              → .btn-violet (primary), .btn-ghost (outline)
+   STATS SECTION        → .stats-section, .stat-card
+   FORM PANEL           → .form-panel card that wraps the Add Event form
+   FORM INPUTS          → .glass-input for text, number, and select fields
+   EVENT CARDS          → .event-card, .card-accent, .card-body, .card-title-row
+   SEAT GRID            → .seat-grid, .seat-box, .seat-label, .seat-value
+   PROGRESS BAR         → .progress-row, .progress-track, .bar-fill
+   CARD BUTTONS         → .btn-register, .btn-cancel
+   EMPTY STATE          → .empty-icon-bg, .empty-icon
+   ALERT TOAST          → #alert-box animation
+   FOOTER               → .site-footer
+   ANIMATIONS           → @keyframes softPulse, modalIn, slideIn
+   SCROLLBAR            → custom webkit scrollbar styling
    ============================================================ */
 
 /* ── Reset & base ─────────────────────────────────────────── */
+/* box-sizing: border-box means padding is included in element width */
 *, *::before, *::after { box-sizing: border-box; }
+/* smooth scrolling when clicking anchor links like href="#events" */
 html  { scroll-behavior: smooth; }
 body  {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'Inter', system-ui, sans-serif; /* Inter from Google Fonts */
   margin: 0;
   min-height: 100vh;
-  background-color: var(--bg-page);
-  color: var(--text-primary);
-  transition: background-color 0.3s, color 0.3s;
+  background-color: var(--bg-page);   /* changes between dark/light mode */
+  color: var(--text-primary);          /* changes between dark/light mode */
+  transition: background-color 0.3s, color 0.3s; /* smooth mode switch */
 }
 
 /* ══════════════════════════════════════════════════════════
    CSS CUSTOM PROPERTIES — DARK (default)
+   These variables are used everywhere in the CSS below.
+   When the user switches to light mode, html.light overrides them.
    ══════════════════════════════════════════════════════════ */
 :root {
   /* Backgrounds */

@@ -1,6 +1,35 @@
 <!DOCTYPE html>
+<!--
+  FILE: index.html
+  PROJECT: Student Event Registration Dashboard
+  AUTHOR: Makuza Nadege
+  DATE: 2025
+
+  HOW TO SEARCH THIS FILE:
+  Use Ctrl+F and search for any keyword below:
+
+  KEYWORD              → WHAT YOU WILL FIND
+  ─────────────────────────────────────────────
+  HEAD SECTION         → Meta tags, Tailwind CDN, Google Fonts, style.css link
+  NAVBAR               → Top navigation bar with logo, links, search, mode toggle
+  HERO SECTION         → Big heading, description, Browse/Add Event buttons
+  STATISTICS SECTION   → Total Events, Total Registered, Remaining Seats cards
+  MAIN CONTENT         → The two-column layout wrapper
+  ADD EVENT FORM       → Form with Title, Category, Seats inputs + submit button
+  EVENT DISPLAY AREA   → The grid where event cards are injected by JavaScript
+  EMPTY STATE          → "No events found" message shown when search has no results
+  FOOTER               → Copyright line at the bottom
+-->
 <html lang="en">
 <head>
+  <!-- HEAD SECTION ─────────────────────────────────────────
+       charset    : tells the browser to use UTF-8 characters
+       viewport   : makes the page scale correctly on mobile phones
+       title      : text shown in the browser tab
+       Tailwind   : CSS utility framework loaded from CDN (no install needed)
+       Inter font : clean modern font from Google Fonts
+       style.css  : our custom CSS file for dark/light mode and card styles
+  ──────────────────────────────────────────────────────── -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Student Event Registration Dashboard</title>
