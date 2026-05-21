@@ -69,13 +69,13 @@ const DEFAULT_EVENTS = [
   { id: 6, title: 'Mental Health Workshop',  category: 'Health',     seats: 25,  registered: 10 },
 ];
 
-let events      = [];
-let searchQuery = '';
-let nextId      = 1;
-let alertTimer  = null;
+let events      = []; //Create an empty list called events
+let searchQuery = ''; //it Create a variable to store what user types in search
+let nextId      = 1;  //Keep track of the next event ID
+let alertTimer  = null;  //Create timer variable
 
 function saveToStorage() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({ events, nextId }));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({ events, nextId }));        //Store something permanently in browser
 }
 
 function loadFromStorage() {
@@ -94,7 +94,7 @@ function loadFromStorage() {
     return false;
   }
 }
-
+//STATISTICS
 function updateStats() {
   const totalRegistered = events.reduce((sum, e) => sum + e.registered, 0);
 
@@ -108,7 +108,7 @@ function updateStats() {
   document.getElementById('event-count-badge').textContent =
     count === 1 ? '1 event' : `${count} events`;
 }
-
+//search input
 function getFilteredEvents() {
   if (!searchQuery) return events;
 
@@ -120,7 +120,8 @@ function getFilteredEvents() {
   );
 }
 
-function escapeHtml(str) {
+function escapeHtml(str) {  //clean text before showing it in HTML
+
   return String(str)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -236,14 +237,15 @@ function renderEvents() {
   const emptyState = document.getElementById('empty-state');
 
   const filtered = getFilteredEvents();
-  const cards    = filtered.map(event => createEventCard(event));
+  const cards    = filtered.map(event => createEventCard(event));       //Take every item and transform it
+
 
   container.innerHTML = '';
 
   if (cards.length === 0) {
-    emptyState.classList.remove('hidden');
+    emptyState.style.display = 'block';
   } else {
-    emptyState.classList.add('hidden');
+    emptyState.style.display = 'none';
 
     cards.forEach(card => container.appendChild(card));
   }
@@ -450,21 +452,21 @@ function handleAddEvent(e) {
   const seats    = parseInt(seatsEl.value, 10);
 
   ['title-error', 'category-error', 'seats-error'].forEach(id =>
-    document.getElementById(id).classList.add('hidden')
+    document.getElementById(id).style.display = 'none'
   );
 
   let valid = true;
 
   if (!title) {
-    document.getElementById('title-error').classList.remove('hidden');
+    document.getElementById('title-error').style.display = 'block';
     valid = false;
   }
   if (!category) {
-    document.getElementById('category-error').classList.remove('hidden');
+    document.getElementById('category-error').style.display = 'block';
     valid = false;
   }
   if (!seatsEl.value || isNaN(seats) || seats < 1 || seats > 500) {
-    document.getElementById('seats-error').classList.remove('hidden');
+    document.getElementById('seats-error').style.display = 'block';
     valid = false;
   }
 
@@ -518,10 +520,10 @@ function showAlert(message, type = 'success') {
 
   box.setAttribute('style', `background:${p.bg};color:${p.color};border-color:${p.border};`);
   box.innerHTML = `${icons[type] || icons.info}<span>${message}</span>`;
-  box.classList.remove('hidden');
+  box.style.display = 'flex';
 
   if (alertTimer) clearTimeout(alertTimer);
-  alertTimer = setTimeout(() => box.classList.add('hidden'), 3500);
+  alertTimer = setTimeout(function() { box.style.display = 'none'; }, 3500);
 }
 
 function attachCardListeners() {
@@ -547,8 +549,10 @@ function initDarkMode() {
   const saved = localStorage.getItem('eduevents_theme') || 'dark';
   applyTheme(saved);
 
-  document.getElementById('mode-toggle')?.addEventListener('click', toggleTheme);
-  document.getElementById('mode-toggle-mobile')?.addEventListener('click', toggleTheme);
+  const modeToggle = document.getElementById('mode-toggle');
+  if (modeToggle) {
+    modeToggle.addEventListener('click', toggleTheme);
+  }
 }
 
 function toggleTheme() {
@@ -562,11 +566,13 @@ function applyTheme(theme) {
 
   html.classList.toggle('light', isLight);
 
-  document.getElementById('icon-moon')?.classList.toggle('hidden',  isLight);
-  document.getElementById('icon-sun')?.classList.toggle('hidden',  !isLight);
-
-  document.getElementById('icon-moon-m')?.classList.toggle('hidden',  isLight);
-  document.getElementById('icon-sun-m')?.classList.toggle('hidden',  !isLight);
+  if (isLight) {
+    document.getElementById('icon-moon').style.display = 'none';
+    document.getElementById('icon-sun').style.display  = 'inline';
+  } else {
+    document.getElementById('icon-moon').style.display = 'inline';
+    document.getElementById('icon-sun').style.display  = 'none';
+  }
 
   localStorage.setItem('eduevents_theme', theme);
 }
@@ -580,19 +586,24 @@ function attachMobileMenu() {
   if (!btn || !menu) return;
 
   btn.addEventListener('click', () => {
-    const nowHidden = menu.classList.toggle('hidden');
-
-    iconOpen?.classList.toggle('hidden',  !nowHidden);
-    iconClose?.classList.toggle('hidden',  nowHidden);
-
-    btn.setAttribute('aria-expanded', String(!nowHidden));
+    if (menu.style.display === 'none' || menu.style.display === '') {
+      menu.style.display = 'block';
+      if (iconOpen)  iconOpen.style.display  = 'none';
+      if (iconClose) iconClose.style.display = 'inline';
+      btn.setAttribute('aria-expanded', 'true');
+    } else {
+      menu.style.display = 'none';
+      if (iconOpen)  iconOpen.style.display  = 'inline';
+      if (iconClose) iconClose.style.display = 'none';
+      btn.setAttribute('aria-expanded', 'false');
+    }
   });
 
   menu.querySelectorAll('a').forEach(a => {
     a.addEventListener('click', () => {
-      menu.classList.add('hidden');
-      iconOpen?.classList.remove('hidden');
-      iconClose?.classList.add('hidden');
+      menu.style.display = 'none';
+      if (iconOpen)  iconOpen.style.display  = 'inline';
+      if (iconClose) iconClose.style.display = 'none';
       btn.setAttribute('aria-expanded', 'false');
     });
   });
