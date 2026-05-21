@@ -1,58 +1,19 @@
-/* ============================================================
-   FILE: style.css
-   PROJECT: Student Event Registration Dashboard
-   AUTHOR: Makuza Nadege
-   DATE: 2025
-
-   HOW TO SEARCH THIS FILE:
-   Use Ctrl+F and search for any keyword below:
-
-   KEYWORD              → WHAT YOU WILL FIND
-   ─────────────────────────────────────────────
-   RESET & BASE         → box-sizing, scroll behavior, body font
-   CSS CUSTOM PROPERTIES → All color/background variables for dark mode
-   CSS CUSTOM PROPERTIES LIGHT → All color/background variables for light mode
-   UTILITY CLASSES      → .text-adaptive, .text-muted, .stat-label etc.
-   NAVBAR               → .nav-blur, .nav-border, .nav-link, .mob-link
-   LOGO                 → .logo-bg gradient and glow
-   MODE TOGGLE BUTTON   → .mode-btn dark/light switch button
-   HERO                 → .hero-section background, badge, heading, description
-   BUTTONS              → .btn-violet (primary), .btn-ghost (outline)
-   STATS SECTION        → .stats-section, .stat-card
-   FORM PANEL           → .form-panel card that wraps the Add Event form
-   FORM INPUTS          → .glass-input for text, number, and select fields
-   EVENT CARDS          → .event-card, .card-accent, .card-body, .card-title-row
-   SEAT GRID            → .seat-grid, .seat-box, .seat-label, .seat-value
-   PROGRESS BAR         → .progress-row, .progress-track, .bar-fill
-   CARD BUTTONS         → .btn-register, .btn-cancel
-   EMPTY STATE          → .empty-icon-bg, .empty-icon
-   ALERT TOAST          → #alert-box animation
-   FOOTER               → .site-footer
-   ANIMATIONS           → @keyframes softPulse, modalIn, slideIn
-   SCROLLBAR            → custom webkit scrollbar styling
-   ============================================================ */
-
 /* ── Reset & base ─────────────────────────────────────────── */
-/* box-sizing: border-box means padding is included in element width */
 *, *::before, *::after { box-sizing: border-box; }
-/* smooth scrolling when clicking anchor links like href="#events" */
 html  { scroll-behavior: smooth; }
 body  {
-  font-family: 'Inter', system-ui, sans-serif; /* Inter from Google Fonts */
+  font-family: 'Inter', system-ui, sans-serif;
   margin: 0;
   min-height: 100vh;
-  background-color: var(--bg-page);   /* changes between dark/light mode */
-  color: var(--text-primary);          /* changes between dark/light mode */
-  transition: background-color 0.3s, color 0.3s; /* smooth mode switch */
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  transition: background-color 0.3s, color 0.3s;
 }
 
 /* ══════════════════════════════════════════════════════════
    CSS CUSTOM PROPERTIES — DARK (default)
-   These variables are used everywhere in the CSS below.
-   When the user switches to light mode, html.light overrides them.
    ══════════════════════════════════════════════════════════ */
 :root {
-  /* Backgrounds */
   --bg-page:          #020617;
   --bg-nav:           rgba(2,6,23,0.92);
   --bg-hero:          linear-gradient(180deg,#0f0a1e 0%,#020617 100%);
@@ -66,7 +27,6 @@ body  {
   --bg-empty-icon:    #1e293b;
   --bg-footer:        rgba(15,23,42,0.5);
 
-  /* Borders */
   --border-nav:       rgba(255,255,255,0.10);
   --border-card:      rgba(255,255,255,0.08);
   --border-card-hover:rgba(139,92,246,0.35);
@@ -76,7 +36,6 @@ body  {
   --border-seat:      rgba(255,255,255,0.08);
   --border-footer:    rgba(255,255,255,0.05);
 
-  /* Text */
   --text-primary:     #f1f5f9;
   --text-secondary:   #94a3b8;
   --text-muted:       #64748b;
@@ -88,7 +47,6 @@ body  {
   --text-footer:      #64748b;
   --text-empty-icon:  #475569;
 
-  /* Hero specific */
   --hero-badge-bg:    rgba(255,255,255,0.07);
   --hero-badge-border:rgba(255,255,255,0.15);
   --hero-badge-text:  #cbd5e1;
@@ -98,22 +56,18 @@ body  {
   --hero-btn-ghost-border:rgba(255,255,255,0.20);
   --hero-btn-ghost-text:#ffffff;
 
-  /* Blobs */
   --blob-violet:      rgba(109,40,217,0.20);
   --blob-emerald:     rgba(16,185,129,0.10);
 
-  /* Nav hover */
   --nav-hover-bg:     rgba(255,255,255,0.10);
   --ham-color:        #94a3b8;
 
-  /* Mode button */
   --mode-btn-bg:      rgba(255,255,255,0.06);
   --mode-btn-border:  rgba(255,255,255,0.12);
   --mode-btn-color:   #94a3b8;
   --mode-btn-hover-bg:rgba(255,255,255,0.12);
   --mode-btn-hover-color:#ffffff;
 
-  /* Scrollbar */
   --scrollbar-track:  #020617;
   --scrollbar-thumb:  #1e293b;
 }
@@ -234,7 +188,6 @@ html.light {
 }
 
 /* ── Hero — ALWAYS dark, text always white/light ─────────── */
-/* The hero looks best dark in both modes. We lock it. */
 .hero-section {
   background:
     radial-gradient(ellipse 80% 60% at 50% -10%, rgba(109,40,217,0.45) 0%, transparent 70%),
@@ -242,8 +195,6 @@ html.light {
   position: relative;
 }
 
-/* In light mode, keep hero dark but add a subtle top border so it
-   doesn't look disconnected from the white navbar */
 html.light .hero-section {
   background:
     radial-gradient(ellipse 80% 60% at 50% -10%, rgba(124,58,237,0.5) 0%, transparent 70%),
@@ -251,7 +202,6 @@ html.light .hero-section {
   border-top: 1px solid rgba(139,92,246,0.2);
 }
 
-/* Hero text — always white/light regardless of mode */
 .hero-badge {
   background: rgba(255,255,255,0.10);
   border: 1px solid rgba(255,255,255,0.20);
@@ -263,7 +213,6 @@ html.light .hero-section {
 .blob-violet  { background: rgba(109,40,217,0.20); }
 .blob-emerald { background: rgba(16,185,129,0.10); }
 
-/* Ghost button in hero — always white outline */
 .btn-ghost {
   background: rgba(255,255,255,0.08);
   color: #ffffff;
@@ -299,6 +248,8 @@ html.light .hero-section {
 }
 .btn-violet:hover  { opacity: .88; transform: translateY(-1px); }
 .btn-violet:active { transform: translateY(0); }
+
+/* ── Stats section ────────────────────────────────────────── */
 .stats-section {
   background: var(--bg-stats);
   transition: background 0.3s;
@@ -434,7 +385,6 @@ html.light .glass-input option { background: #f8fafc; color: #0f172a; }
 .seat-value { font-weight: 700; font-size: 0.875rem; }
 @media (min-width: 640px) { .seat-value { font-size: 1rem; } }
 
-/* In light mode, seat values that use inline color:#e2e8f0 need override */
 html.light .seat-value-default { color: #0f172a !important; }
 
 .progress-row {
